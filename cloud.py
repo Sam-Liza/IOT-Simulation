@@ -10,7 +10,7 @@ NUM_PLAYERS = 10
 
 class Cloud(object):
 
-	def __init__(self, gameTraffic, location, timeout):
+	def __init__(self, gameTraffic, location, timeout, num_players):
 		
 		self.requestList = Queue.Queue()
 
@@ -27,13 +27,12 @@ class Cloud(object):
 
 	def updateTime(self, time):  # is this how it works? 
 		self.timeMS = time
-		return processResponinterse(self)
+		return self.processResponse(time)
 
-	def processResponse(self):
-
-		if self.timeMS  % timeToProcess == 0 and not self.requestList.empty() :
+	def processResponse(self, time):
+		if self.timeMS  % self.timeToProcess == 0 and not self.requestList.empty() :
 			headPacket = self.requestList.get();
-			if (time - headPacket.timestamp) >  timeout: 
+			if (time - headPacket.timestamp) >  self.timeout: 
 				return None
 			else: 
 				responsePackets = []
@@ -43,7 +42,7 @@ class Cloud(object):
 					# update packet 
 					newPacket.sendAddress = 0
 					newPacket.receiveAddress = i
-					responsePackets[i].append(newPacket)
+					responsePackets.append(newPacket)
 				return responsePackets
 		else:
 			return None

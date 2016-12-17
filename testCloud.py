@@ -3,39 +3,20 @@ import packet
 
 if __name__ == "__main__":
 	
-def __init__(self, packet_id, event, timestamp, receiverAddress, senderAddress):
-        self._init_packet_id()
-        self.event = event
-        self.timestamp = timestamp
-        self.position = position
-        self.receiverAddress = receiverAddress
-        self.senderAddress = senderAddress
+    packet1 = packet.Packet(0, 100, 0, 0, 1)
+    packet2 = packet.Packet(0, 100, 0, 0, 2)
+    cloud = cloud.Cloud(0, 0, 10, 10)
+    cloud.receiveRequest(packet1)
 
+    cloud.receiveRequest(packet2)
 
-    packet1 = packet()
+    time = 90
 
-
-	packet1.id = 0
-	packet1.sendAddress = 1
-	packet1.receiveAddress = 0
-	packet1.timestamp = 100
-	packet2.id = 1
-	packet2.sendAddress = 2
-	packet2.receiveAddress = 0
-	packet2.timestamp = 0
-
-	cloud = Cloud(0, 0, 10)
-
-	cloud.receiveRequest(packet1)
-	cloud.receiveRequest(packet2)
-
-	time = 90
-
-	for i in range(0,10):
+    for i in range(0,10):
 		time = time + 1
 		packetList = cloud.updateTime(time)
 		if packetList != None:
-			print packetList[0].id
+			print packetList[0].packet_id
 
 
 
