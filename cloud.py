@@ -6,11 +6,10 @@ import Queue
 HI_P_CLOUD_DELAY = 10  
 MED_P_CLOUD_DELAY = 5
 LOW_P_CLOUD_DELAY = 3
-NUM_PLAYERS = 10
-ks
+
 class Cloud(object):
 
-	def __init__(self, gameTraffic, location, timeout):
+	def __init__(self, gameTraffic, location, timeout, num_players):
 		
 		self.requestList = Queue.Queue()
 
@@ -21,29 +20,29 @@ class Cloud(object):
 		else:
 			self.timeToProcess = HIGH_P_CLOUD_DELAY
 
+		self.num_players = num_players
 		self.location = location
 		self.timeMS = 0
 		self.timeout = timeout
 
 	def updateTime(self, time):  # is this how it works? 
 		self.timeMS = time
-		return processResponse(self)
+		return self.processResponse(time)
 
-	def processResponse(self):
-
-		if self.timeMS  % timeToProcess == 0 and not self.requestList.empty() :
+	def processResponse(self, time):
+		if self.timeMS  % self.timeToProcess == 0 and not self.requestList.empty() :
 			headPacket = self.requestList.get();
-			if (time - headPacket.timestamp) >  timeout: 
+			if (time - headPacket.timestamp) >  self.timeout: 
 				return None
 			else: 
-				responsePackets[]
-				for i in range(1,NUM_PLAYERS):
+				responsePackets = []
+				for i in range(1,self.num_players):
 					newPacket = headPacket
 
 					# update packet 
 					newPacket.sendAddress = 0
 					newPacket.receiveAddress = i
-					responsePackets[i].append(newPacket)
+					responsePackets.append(newPacket)
 				return responsePackets
 		else:
 			return None

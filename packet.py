@@ -2,7 +2,7 @@ import uuid
 
 class Packet(object):
 
-    def __init__(self, position, timestamp, receiverAddress, senderAddress):
+    def __init__(self, timestamp, position, receiverAddress, senderAddress):
         self._init_packet_id()
         self.timestamp = timestamp
         self.position = position

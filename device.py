@@ -1,5 +1,6 @@
 from game import Game
 from packet import Packet
+import Cloud
 
 class Device(object):
 
@@ -8,42 +9,47 @@ class Device(object):
 		self.hwTier = hwTier
 		self.eventsPerSec = eventsPerSec
 		self.location = location
+		self.position = (deviceID * 10, )
+		self.timeMS = 0
 
-	def getSpecsForGame(game):
-		pass
-
-	def sendPacket():
-		packet = Packet((5,50), , deviceID)
-
-	def run():
-		sendPacket()
-
+	def updateTime(self, time):
+		self.timeMS = time
 		
+		return processResponse(self)
+
+	def processResponse():
+		if self.timeMS  % eventsPerSec == 0:
+			packet = Packet(self.position, self.timeMS, 0, self.deviceID)
+			return packet
+		return None
+
+	def movePlayer():
+
 
 
 class OculusRift(Device):
-	def __init__(self, deviceID, hwTier, eventsPerSec, location):
-		super(OculusRift, self).__init__(deviceID, 90, eventsPerSec, location)
+	def __init__(self, deviceID, location):
+		super(OculusRift, self).__init__(deviceID, 90, 5, location)
 
 class HTCVive(Device):
-	def __init__(self, deviceID, hwTier, eventsPerSec, location):
-		super(HTCVive, self).__init__(deviceID, 90, eventsPerSec, location)
+	def __init__(self, deviceID, location):
+		super(HTCVive, self).__init__(deviceID, 90, 5, location)
 
 class PlayStationVR(Device):
-	def __init__(self, deviceID, hwTier, eventsPerSec, location):
-		super(PlayStationVR, self).__init__(deviceID, 120, eventsPerSec, location)
+	def __init__(self, deviceID, location):
+		super(PlayStationVR, self).__init__(deviceID, 120, 5, location)
 
 class LG360VR(Device):
-	def __init__(self, deviceID, hwTier, eventsPerSec, location):
-		super(LG360VR, self).__init__(deviceID, 120, eventsPerSec, location)
+	def __init__(self, deviceID, location):
+		super(LG360VR, self).__init__(deviceID, 120, 5, location)
 
 class GearVR(Device):
-	def __init__(self, deviceID, hwTier, eventsPerSec, location):
-		super(GearVR, self).__init__(deviceID, 60, eventsPerSec, location)
+	def __init__(self, deviceID, location):
+		super(GearVR, self).__init__(deviceID, 60, 5, location)
 
 class VisusVR(Device):
-	def __init__(self, deviceID, hwTier, eventsPerSec, location):
-		super(VisusVR, self).__init__(deviceID, 60, eventsPerSec, location)
+	def __init__(self, deviceID, location):
+		super(VisusVR, self).__init__(deviceID, 60, 5, location)
 
 devices = {
 	"OculusRift" : OculusRift(),
