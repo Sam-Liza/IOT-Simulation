@@ -12,11 +12,13 @@ class Device(object):
 	def getSpecsForGame(game):
 		pass
 
-	def requestResend():
-		pass
-
 	def sendPacket():
-		pass
+		packet = Packet((5,50), , deviceID)
+
+	def run():
+		sendPacket()
+
+		
 
 
 class OculusRift(Device):
@@ -31,13 +33,13 @@ class PlayStationVR(Device):
 	def __init__(self, deviceID, hwTier, eventsPerSec, location):
 		super(PlayStationVR, self).__init__(deviceID, 120, eventsPerSec, location)
 
-class GearVR(Device):
-	def __init__(self, deviceID, hwTier, eventsPerSec, location):
-		super(GearVR, self).__init__(deviceID, 60, eventsPerSec, location)
-
 class LG360VR(Device):
 	def __init__(self, deviceID, hwTier, eventsPerSec, location):
 		super(LG360VR, self).__init__(deviceID, 120, eventsPerSec, location)
+
+class GearVR(Device):
+	def __init__(self, deviceID, hwTier, eventsPerSec, location):
+		super(GearVR, self).__init__(deviceID, 60, eventsPerSec, location)
 
 class VisusVR(Device):
 	def __init__(self, deviceID, hwTier, eventsPerSec, location):
