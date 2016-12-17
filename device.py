@@ -9,22 +9,22 @@ class Device(object):
 		self.hwTier = hwTier
 		self.eventsPerSec = eventsPerSec
 		self.location = location
-		self.position = (deviceID * 10, )
+		self.position = (deviceID * 5, deviceID * 10)
 		self.timeMS = 0
 
 	def updateTime(self, time):
 		self.timeMS = time
-		
+		movePlayer(time)
 		return processResponse(self)
 
 	def processResponse():
-		if self.timeMS  % eventsPerSec == 0:
+		if self.timeMS  % self.eventsPerSec == 0:
 			packet = Packet(self.position, self.timeMS, 0, self.deviceID)
 			return packet
 		return None
 
-	def movePlayer():
-
+	def movePlayer(time):
+		
 
 
 class OculusRift(Device):

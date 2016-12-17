@@ -11,7 +11,3 @@ class Packet(object):
 
     def _init_packet_id(self):
         self.packet_id = uuid.uuid4()	# generate a random UUID
-
-    @property
-    def packet_id(self):
-        return self.packet_id
