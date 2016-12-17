@@ -1,19 +1,59 @@
+import random
+from location import Location
+
 class Network(object):
 
-	def __init__(self, download, upload):
-		self.download = download
-		self.upload = upload
+	def __init__(self, packet_loss_prob):
+		self.packet_loss_prob = packet_loss_prob / 100.0
+		pass
 
-	def timeForDownload(size):
-		return size / self.download
+	def sendPacket(self, packet, loc1, loc2):
+		# Check for packet loss
+		if random.random() < self.packet_loss_prob:
+			return 0
 
-	def timeForUpload(size):
-		return size / self.upload
+		# Otherwise, return propogation delay
+		return loc1.propogationDelayFrom(loc2)
 
-class TuftsSecure(Network):
-	def __init__(self):
-		super(TuftsSecure, self).__init__(190.3, 3.16)
+class TCP(Network):
 
-networks = {
-	"tufts" : TuftsSecure()
-}
+	TIMEOUT_RATE = 100 # ms
+	HEADER_PROCESSING = 5 # ms
+	
+	def __init__(self, packet_loss_prob):
+		super(TuftsSecure, self).__init__(packet_loss_prob)
+
+	def sendPacket(self, packet, loc1, loc2):
+		propDelay = Network.sendPacket(packet, loc1, loc2)
+		propDelay += TCP.HEADER_PROCESSING
+		if propDelay >= TCP.HEADER_PROCESSING:
+			return propDelay * 2
+		else:
+			return TCP.TIMEOUT_RATE + self.sendPacket(packet, loc1, loc2)
+
+class UDP(Network):
+
+	HEADER_PROCESSING = 2 # ms
+	
+	def __init__(self, packet_loss_prob):
+		super(TuftsSecure, self).__init__(packet_loss_prob)
+
+	def sendPacket(self, packet, loc1, loc2):
+		propDelay = Network.sendPacket(packet, loc1, loc2)
+		propDelay += UDP.HEADER_PROCESSING
+		if propDelay >= UDP.HEADER_PROCESSING:
+			return propDelay
+		else:
+			return 0
+
+if __name__ == "__main__":
+
+	loc1 = Location("Washington")
+	loc2 = Location("Chicago")
+
+	# Timeout test
+	network = Network(2) # 2 percent chance to drop packet
+	attempts = 0
+	while network.sendPacket(0, loc1, loc2):
+		attempts += 1
+	print "Network dropped packet after " + str(attempts + 1) + " packets sent"
