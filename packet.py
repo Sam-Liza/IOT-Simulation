@@ -2,12 +2,13 @@ import uuid
 
 class Packet(object):
 
-    def __init__(self, client_id, event_type, packet_size, timestamp):
+    def __init__(self, packet_id, event, timestamp, receiverAddress, senderAddress):
         self._init_packet_id()
-        self.client = client_id
-        self.event = event_type
-        self.size = packet_size
+        self.event = event
         self.timestamp = timestamp
+        self.position = position
+        self.receiverAddress = receiverAddress
+        self.senderAddress = senderAddress
 
     def _init_packet_id(self):
-        self.unique_id = uuid.uuid4()
+        self.packet_id = uuid.uuid4()	# generate a random UUID
