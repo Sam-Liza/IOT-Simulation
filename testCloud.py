@@ -4,7 +4,7 @@ import packet
 if __name__ == "__main__":
 	
     packet1 = packet.Packet(0, 100, 0, 0, 1)
-    packet2 = packet.Packet(0, 100, 0, 0, 2)
+    packet2 = packet.Packet(0, 0, 0, 0, 2)
     cloud = cloud.Cloud(0, 0, 10, 10)
     cloud.receiveRequest(packet1)
 

@@ -6,7 +6,6 @@ import Queue
 HI_P_CLOUD_DELAY = 10  
 MED_P_CLOUD_DELAY = 5
 LOW_P_CLOUD_DELAY = 3
-NUM_PLAYERS = 10
 
 class Cloud(object):
 
@@ -21,6 +20,7 @@ class Cloud(object):
 		else:
 			self.timeToProcess = HIGH_P_CLOUD_DELAY
 
+		self.num_players = num_players
 		self.location = location
 		self.timeMS = 0
 		self.timeout = timeout
@@ -36,7 +36,7 @@ class Cloud(object):
 				return None
 			else: 
 				responsePackets = []
-				for i in range(1,NUM_PLAYERS):
+				for i in range(1,self.num_players):
 					newPacket = headPacket
 
 					# update packet 
