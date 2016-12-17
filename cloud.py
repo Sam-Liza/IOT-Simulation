@@ -7,7 +7,7 @@ HI_P_CLOUD_DELAY = 10
 MED_P_CLOUD_DELAY = 5
 LOW_P_CLOUD_DELAY = 3
 NUM_PLAYERS = 10
-ks
+
 class Cloud(object):
 
 	def __init__(self, gameTraffic, location, timeout):
@@ -27,7 +27,7 @@ class Cloud(object):
 
 	def updateTime(self, time):  # is this how it works? 
 		self.timeMS = time
-		return processResponse(self)
+		return processResponinterse(self)
 
 	def processResponse(self):
 
@@ -36,7 +36,7 @@ class Cloud(object):
 			if (time - headPacket.timestamp) >  timeout: 
 				return None
 			else: 
-				responsePackets[]
+				responsePackets = []
 				for i in range(1,NUM_PLAYERS):
 					newPacket = headPacket
 

@@ -1,7 +1,20 @@
 import cloud
-
+import packet
 
 if __name__ == "__main__":
+	
+def __init__(self, packet_id, event, timestamp, receiverAddress, senderAddress):
+        self._init_packet_id()
+        self.event = event
+        self.timestamp = timestamp
+        self.position = position
+        self.receiverAddress = receiverAddress
+        self.senderAddress = senderAddress
+
+
+    packet1 = packet()
+
+
 	packet1.id = 0
 	packet1.sendAddress = 1
 	packet1.receiveAddress = 0
