@@ -25,7 +25,7 @@ class Cloud(object):
 		self.timeMS = 0
 		self.timeout = timeout
 
-	def updateTime(self, time):  # is this how it works? 
+	def updateTime(self, time):  
 		self.timeMS = time
 		return self.processResponse(time)
 
@@ -47,6 +47,6 @@ class Cloud(object):
 		else:
 			return None
 
-	def receiveRequest(self, packet):   # can this access 
+	def receiveRequest(self, packet):
 		self.requestList.put(packet)
 
