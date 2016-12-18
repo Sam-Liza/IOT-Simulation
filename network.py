@@ -12,8 +12,8 @@ class Network(object):
 		if random.random() < self.packet_loss_prob:
 			return 0
 
-		# Otherwise, return propogation delay
-		return loc1.propogationDelayFrom(loc2)
+		# Otherwise, return propagation delay
+		return loc1.propagationDelayFrom(loc2)
 
 class TCP(Network):
 
