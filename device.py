@@ -1,6 +1,7 @@
 from game import Game
 from packet import Packet
 from random import randint
+from data import Data
 
 TICKS_PER_EVENT = 5
 
@@ -10,42 +11,23 @@ class Device(object):
 		self.deviceID = deviceID
 		self.fps = fps
 		self.ticksPerEvent = ticksPerEvent
+		self.firstEventOffset = randint(0, ticksPerEvent - 1)
 		self.location = location
+		self.data = Data()
 
-		self.position = (randint(0, 10), randint(5, 20))
-		self.timeMS = 0
-		self.packetDict = {}
-
-	def updateTime(self, time, packet=None):
-		if packet is None:
-			return sendPacket(time)
-		else:
-			receivePacket(time, packet)
-
-
-	def sendPacket(self, time):
-		if time % self.ticksPerEvent == 0:
-			movePlayer(time)
-			packet = Packet(time, self.position, 0, self.deviceID)
+	def responseAt(self, time):
+		if (time + self.firstEventOffset) % self.ticksPerEvent == 0:
+			packet = Packet(time, 0, self.deviceID)
 			id = packet.packet_id
-			packetDict[id] = {'sendTime' : time, 'receiveTime' : -1}
-			print 'Device %s. Packet sent: %s ' % (self.deviceID, packet.packet_id)
-			return packet
-		return None
-
-	def receivePacket(time, packet):
-		print 'Device %s. Packet received: %s ' % (self.deviceID, packet.packet_id)
-		id = packet.packet_id
-		if id in packetDict.keys():
-			packetDict[id]['receiveTime'] = time
+			self.data.putSend(id, time)
+			return [packet]
 		else:
-			# stray packet received
-			packetDict[id] = {'sendTime' : -1, 'receiveTime' : time}
+			return []
 
-	def movePlayer(time):
-			self.position = ( randint(0, 10), randint(5, 50))
-
-
+	def receivePacket(packet):
+		id = packet.packet_id
+		arrival = packet.arriveTime()
+		self.data.putReceive(id, arrival)
 
 
 class OculusRift(Device):

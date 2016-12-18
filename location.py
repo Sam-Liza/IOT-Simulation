@@ -34,7 +34,7 @@ class LocationCalculator(object):
 		return None
 
 	locations = {
-		"Atlanta"
+		"Atlanta",
 		"Austin",
 		"Cambridge",
 		"Chicago",
@@ -111,7 +111,7 @@ class LocationCalculator(object):
 		self.addPropagation("San Francsico", "Seattle", 60)
 		self.addPropagation("San Francsico", "Washington", 41)
 
-		self.addPropagation("Washington", "Seattle", 68)
+		self.addPropagation("Seattle", "Washington", 68)
 
 if __name__ == "__main__":
 	loc1 = Location("Washington")
