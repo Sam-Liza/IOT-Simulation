@@ -11,11 +11,11 @@ class Device(object):
 		self.fps = fps
 		self.ticksPerEvent = ticksPerEvent
 		self.location = location
-		
+
 		self.position = (randint(0, 10), randint(5, 20))
 		self.timeMS = 0
 		self.packetDict = {}
-	
+
 	def updateTime(self, time, packet=None):
 		if packet is None:
 			return sendPacket(time)

@@ -1,9 +1,9 @@
 import random
 
 class Location(object):
-	
+
 	calculator = None
-	
+
 	def __init__(self, location = None):
 		if not Location.calculator:
 			Location.calculator = LocationCalculator()
@@ -35,15 +35,15 @@ class LocationCalculator(object):
 
 	locations = {
 		"Atlanta"
-		"Austin", 
-		"Cambridge", 
-		"Chicago", 
-		"Denver", 
-		"New York", 
-		"Orlando", 
-		"Philadelphia", 
-		"San Francisco", 
-		"Seattle", 
+		"Austin",
+		"Cambridge",
+		"Chicago",
+		"Denver",
+		"New York",
+		"Orlando",
+		"Philadelphia",
+		"San Francisco",
+		"Seattle",
 		"Washington"
 	}
 

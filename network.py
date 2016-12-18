@@ -19,7 +19,7 @@ class TCP(Network):
 
 	TIMEOUT_RATE = 100 # ms
 	HEADER_PROCESSING = 5 # ms
-	
+
 	def __init__(self, packet_loss_prob):
 		super(TuftsSecure, self).__init__(packet_loss_prob)
 
@@ -34,7 +34,7 @@ class TCP(Network):
 class UDP(Network):
 
 	HEADER_PROCESSING = 2 # ms
-	
+
 	def __init__(self, packet_loss_prob):
 		super(TuftsSecure, self).__init__(packet_loss_prob)
 

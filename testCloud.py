@@ -2,7 +2,7 @@ import cloud
 import packet
 
 if __name__ == "__main__":
-	
+
     packet1 = packet.Packet(100, 0, 0, 1)
     packet2 = packet.Packet( 0, 0, 0, 2)
     packet3 = packet.Packet(100, 0, 0, 1)
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     time = 100
     print "\ntest 1: should return 3 packets"
     for i in range(0,20):
-    	#print time 
+    	#print time
     	packetList = cloud.updateTime(time)
     	if packetList != None:
 			print packetList[0].packet_id
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     print "\ntest 2: should return 2 packets"
 
     for i in range(0,20):
-    	#print time 
+    	#print time
     	packetList = cloud.updateTime(time)
     	if packetList != None:
 			print packetList[0].packet_id
