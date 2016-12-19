@@ -11,6 +11,9 @@ class Visualizer(object):
 		averages = [d.averageLatency() for d in self.data]
 		dat = { "device" : range(1, len(averages) + 1), "average" : averages }
 		dataframe = pandas.DataFrame(dat)
-		chart = ggplot.ggplot(ggplot.aes(x="device", weight="average"), dataframe) + \
+		chart = ggplot.ggplot(ggplot.aes(x="device", weight="average"), dataframe) \
+				+ ggplot.labs(title="Average Latency Per Device") + \
+				ggplot.ylab("Average Latency (ms)") + \
+				ggplot.xlab("Device Number")  + \
 				ggplot.geom_bar(stat="identity")
 		chart.show()

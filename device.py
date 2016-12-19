@@ -6,10 +6,10 @@ TICKS_PER_EVENT = 500
 
 class Device(object):
 	cloud_id = 0
-	rendering_time = 5 #ms
+	fps_to_render_time = { 120: 8.3, 90: 11.1, 60: 16.6 }
 
 	def __init__(self, fps, ticksPerEvent, location):
-		self.fps = fps
+		self.rendering_time = Device.fps_to_render_time[fps]
 		self.ticksPerEvent = ticksPerEvent
 		self.firstEventOffset = randint(0, ticksPerEvent - 1)
 		self.location = location
@@ -28,7 +28,7 @@ class Device(object):
 
 	def receivePacket(self, packet):
 		id = packet.packet_id
-		finalTime = packet.arriveTime() + Device.rendering_time
+		finalTime = packet.arriveTime() + self.rendering_time
 		self.data.putFinalTime(id, finalTime)
 
 class OculusRift(Device):

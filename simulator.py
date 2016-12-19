@@ -14,8 +14,9 @@ class Simulator(object):
 		self.time = 0
 
 	def runFor(self, time):
+		starttime = self.time
 		for t in xrange(self.time, self.time + time + 1):
-			if t % 256 == 0 or t == time: _printProgress(t, self.time + time + 1)
+			if t % 256 == 0 or t == time: _printProgress(t, starttime + time)
 			self.step()
 
 	def getResults(self):

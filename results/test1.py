@@ -9,15 +9,22 @@ from location import Location
 # Initialize devices
 DEVICE_OPTS = [ device.OculusRift, device.HTCVive, device.PlayStationVR,
         device.LG360VR, device.GearVR, device.VisusVR ]
+
+loc = Location("Cambridge") # Select at random
 devices = []
-for i in xrange(1, 11):
-    device = random.choice(DEVICE_OPTS)
-    loc = Location() # Select at random
-    devices.append(device(loc))
+for i in xrange(1, 4):
+    d = device.GearVR
+    devices.append(d(loc))
+for i in xrange(3, 6):
+    d = device.OculusRift
+    devices.append(d(loc))
+for i in xrange(6, 11):
+    d = device.PlayStationVR
+    devices.append(d(loc))
 
 # Initialize cloud
 traffic_level = 'low'
-cloud_loc = Location()
+cloud_loc = loc
 timeout = 10000 # 10 seconds
 num_players = len(devices)
 cloud = Cloud(traffic_level, cloud_loc, timeout, num_players)
