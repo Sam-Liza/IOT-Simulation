@@ -1,7 +1,35 @@
-Files:
+COMP 50 IOT
+Fall 2016
+HW 4
 
-run_simulator.sh:
-	
+Project Title:
+Testing the Limitations of System Latency for Virtual Reality
+
+Team:
+Gabe Terrell, Chris Meyerhoff, Jorge Anton, Oghenefego Ahia, Tomer Shapira, Joshua Howe
+
+
+
+===============
+==== Files ====
+
+	install_deps.sh
+	data.py
+	location.py
+	visualizer.py
+	cloud.py
+	game.py
+	packet.py
+	simulator.py
+	vr_simulation.py
+	device.pynetwork.py
+	testCloud.py
+
+===============================
+==== Descriptions of Files ====
+
+install_deps.sh:
+	This is a shell script which installs python libraries required to run the simulator.
 
 data.py:
 
@@ -13,7 +41,7 @@ visualizer.py:
 
 
 cloud.py:
-
+ 
 
 game.py:
 
@@ -28,7 +56,7 @@ vr_simulation.py:
 
 
 device.py:
-
+	This contains the implementation of the Device base class as well as specific VR headset devices modeled within the simulator, each of which inherits from this base class.
 
 network.py:
 
