@@ -13,7 +13,7 @@ Gabe Terrell, Chris Meyerhoff, Jorge Anton, Oghenefego Ahia, Tomer Shapira, Josh
 ===============
 ==== Files ====
 
-	run_simulator.sh
+	install_deps.sh
 	data.py
 	location.py
 	visualizer.py
@@ -28,8 +28,8 @@ Gabe Terrell, Chris Meyerhoff, Jorge Anton, Oghenefego Ahia, Tomer Shapira, Josh
 ===============================
 ==== Descriptions of Files ====
 
-run_simulator.sh:
-	This is a shell script which installs python libraries required to run the simulator. It runs the top-level python file 'vr_simulation.py' to begin simulation
+install_deps.sh:
+	This is a shell script which installs python libraries required to run the simulator.
 
 data.py:
 
