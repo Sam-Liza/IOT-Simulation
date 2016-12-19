@@ -23,8 +23,6 @@ class Cloud(object):
 				and self.requestList.next().isReady(self.time) \
 				and len(responsePackets) <= MAX_PACKETS_PER_STEP:
 			headPacket = self.requestList.pop()
-			if headPacket.arriveTime() < self.time:
-				headPacket.addLatency(self.time - headPacket.arriveTime())
 			for i in xrange(1, self.num_players + 1):
 				newPacket = headPacket.deepcopy()
 				newPacket.sender = 0

@@ -20,7 +20,9 @@ class Packet(object):
         return self.timestamp + self.elapsedTime
 
     def deepcopy(self):
-        return Packet(self.timestamp, self.receiver, self.sender, self.packet_id)
+        p = Packet(self.timestamp, self.receiver, self.sender, self.packet_id)
+        p.addLatency(self.elapsedTime)
+        return p
 
 # Packet priority queue, with packets ordered by arrival time
 class PacketQueue(object):
