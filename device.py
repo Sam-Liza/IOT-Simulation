@@ -1,9 +1,8 @@
-from game import Game
 from packet import Packet
 from random import randint
 from data import Data
 
-TICKS_PER_EVENT = 5
+TICKS_PER_EVENT = 20
 
 class Device(object):
 
@@ -20,6 +19,7 @@ class Device(object):
 			packet = Packet(time, 0, self.deviceID)
 			id = packet.packet_id
 			self.data.putSend(id, time)
+			print 'Device: %d.  Location: %s.  Packet sent: %s.  Timestamp: %s' % (self.deviceID, self.location, packet.packet_id, packet.timestamp)
 			return [packet]
 		else:
 			return []
@@ -28,6 +28,7 @@ class Device(object):
 		id = packet.packet_id
 		arrival = packet.arriveTime()
 		self.data.putReceive(id, arrival)
+		print 'Device: %d.  Location: %s.  Packet received: %s.  Timestamp: %s' % (self.deviceID, self.location, packet.packet_id, packet.timestamp)
 
 
 class OculusRift(Device):
