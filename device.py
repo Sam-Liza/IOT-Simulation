@@ -2,7 +2,7 @@ from packet import Packet
 from random import randint
 from data import Data
 
-TICKS_PER_EVENT = 500
+TICKS_PER_EVENT = 60
 
 class Device(object):
 	cloud_id = 0
