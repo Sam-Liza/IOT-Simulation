@@ -1,4 +1,5 @@
 import cloud, device, network, packet, data
+from packet import Packet
 import heapq
 
 CLOUD = 0
@@ -16,7 +17,10 @@ class Simulator(object):
 		self.activePackets = []
 
 	def run(self):
+		totalTimeStr = str(self.endTime)
 		for timeStep in xrange(self.endTime):
+			if timeStep % 100 == 0:
+				print "\r" + "Computing time step: " + str(timeStep) + " out of " + totalTimeStr,
 			self.runStep(timeStep)
 
 	def getResults(self):
@@ -36,12 +40,15 @@ class Simulator(object):
 		senderLocation = self.locationOf(packet.sender)
 		receiverLocation = self.locationOf(packet.receiver)
 		response = self.network.networkDelay(senderLocation, receiverLocation)
-		if notDropped(reponse):
+		if self.dropped(response):
+			return None
+		else:
 			delay = response
 			packet.addLatency(delay)
 			return packet
-		else:
-			return None
+
+	def dropped(self, response):
+		return response is None
 
 	def addActivePacket(self, packet):
 		toAdd = (packet.arriveTime(), packet)
@@ -54,7 +61,7 @@ class Simulator(object):
 		return len(self.activePackets) > 0
 
 	def popActivePacket(self):
-		return heapq.heappop(self.activePackets)
+		return heapq.heappop(self.activePackets)[1]
 
 	def deliverReadyPackets(self, step):
 		self.resetDeliveryCounts()
@@ -64,7 +71,7 @@ class Simulator(object):
 	def deliverPacket(self, packet):
 		dest = packet.receiver
 		if self.deliveryCounts[dest] <= MAX_PACKETS_PER_STEP:
-			self.endpoints[dest].receivePacket(packetToDeliver)
+			self.endpoints[dest].receivePacket(packet)
 			self.incrementDeliveryCountFor(dest)
 
 	def incrementDeliveryCountFor(self, deviceID):
@@ -73,10 +80,11 @@ class Simulator(object):
 	def updateActivePackets(self, step):
 		for endpoint in self.endpoints:
 			response = endpoint.responseAt(step)
-			for packet in response:
-				self.queuePacket(packet)
+			if response is not None:
+				for packet in response:
+					self.queuePacket(packet)
 
-	def queuePacket(packet):
+	def queuePacket(self, packet):
 		networkResponse = self.sendThruNetwork(packet)
 		if isinstance(networkResponse, Packet):
 			self.addActivePacket(networkResponse)

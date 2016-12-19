@@ -10,7 +10,7 @@ class Network(object):
 	def networkDelay(self, loc1, loc2):
 		# Check for packet loss
 		if random.random() < self.packet_loss_prob:
-			return -1
+			return None
 
 		# Otherwise, return propagation delay
 		return loc1.propagationDelayFrom(loc2)
@@ -21,30 +21,29 @@ class TCP(Network):
 	HEADER_PROCESSING = 5 # ms
 
 	def __init__(self, packet_loss_prob):
-		super(TuftsSecure, self).__init__(packet_loss_prob)
+		super(TCP, self).__init__(packet_loss_prob)
 
 	def networkDelay(self, loc1, loc2):
-		propDelay = Network.networkDelay(loc1, loc2)
-		propDelay += TCP.HEADER_PROCESSING
-		if propDelay >= TCP.HEADER_PROCESSING:
+		propDelay = super(TCP, self).networkDelay(loc1, loc2)
+		if propDelay is not None:
+			propDelay += self.HEADER_PROCESSING
 			return propDelay * 2
 		else:
-			return TCP.TIMEOUT_RATE + self.networkDelay(loc1, loc2)
+			return None
 
 class UDP(Network):
 
 	HEADER_PROCESSING = 2 # ms
 
 	def __init__(self, packet_loss_prob):
-		super(TuftsSecure, self).__init__(packet_loss_prob)
+		super(UDP, self).__init__(packet_loss_prob)
 
 	def networkDelay(self, loc1, loc2):
-		propDelay = Network.networkDelay(loc1, loc2)
-		propDelay += UDP.HEADER_PROCESSING
-		if propDelay >= UDP.HEADER_PROCESSING:
-			return propDelay
+		propDelay = super(UDP, self).networkDelay(loc1, loc2)
+		if propDelay is not None:
+			return propDelay + self.HEADER_PROCESSING
 		else:
-			return 0
+			return None
 
 if __name__ == "__main__":
 
@@ -54,6 +53,6 @@ if __name__ == "__main__":
 	# Timeout test
 	network = Network(2) # 2 percent chance to drop packet
 	attempts = 0
-	while network.networkDelay(loc1, loc2) != -1:
+	while network.networkDelay(loc1, loc2) != None:
 		attempts += 1
 	print "Network dropped packet after " + str(attempts + 1) + " packets sent"

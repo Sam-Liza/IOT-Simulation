@@ -1,15 +1,14 @@
 from simulator import Simulator
 from visualizer import Visualizer
 from cloud import Cloud
-from device import Device
-from network import Network
+import device
+import network as net
 import random
-
-print networks
-print "Tufts download speed is " + str(networks['tufts'].download) + " Mbps."
+from location import Location
 
 # Initialize devices
-DEVICE_OPTS = { OculusRift, HTCVive, PlayStationVR, LG360VR, GearVR, VisusVR }
+DEVICE_OPTS = [ device.OculusRift, device.HTCVive, device.PlayStationVR,
+        device.LG360VR, device.GearVR, device.VisusVR ]
 devices = []
 for i in xrange(1, 11):
     device = random.choice(DEVICE_OPTS)
@@ -17,16 +16,17 @@ for i in xrange(1, 11):
     devices.append(device(i, loc))
 
 # Initialize cloud
-traffic_level = 0
+traffic_level = 'low'
 cloud_loc = Location()
 timeout = 2000 # 2 seconds
 num_players = len(devices)
 cloud = Cloud(traffic_level, cloud_loc, timeout, num_players)
 
 # Initialize network
-network = TCP();
+packet_loss_probability = 0 # % chance of network-related dropped packet
+network = net.TCP(packet_loss_probability);
 
-sim_length = 30 * 60 * 1000     # 30 minutes
+sim_length = 4 * 1000     # 4 seconds
 sim = Simulator(cloud, network, devices, sim_length)
 
 sim.run()

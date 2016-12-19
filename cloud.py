@@ -12,7 +12,7 @@ class Cloud(object):
 
 		self.requestList = Queue.Queue()
 
-		self.timeToProcess = TRAFFIC_DELAY(gameTraffic)
+		self.timeToProcess = TRAFFIC_DELAY[gameTraffic]
 
 		self.num_players = num_players
 		self.location = location

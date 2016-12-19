@@ -17,8 +17,8 @@ class Packet(object):
         self.elapsedTime += elapsedTime
 
     def isReady(self, time):
-        return timestamp + elapsedTime >= time
+        return self.timestamp + self.elapsedTime >= time
 
     def arriveTime(self):
-        return timestamp + elapsedTime
+        return self.timestamp + self.elapsedTime
 

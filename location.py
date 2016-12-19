@@ -33,7 +33,7 @@ class LocationCalculator(object):
 
 		return None
 
-	locations = {
+	locations = [
 		"Atlanta",
 		"Austin",
 		"Cambridge",
@@ -45,7 +45,7 @@ class LocationCalculator(object):
 		"San Francisco",
 		"Seattle",
 		"Washington"
-	}
+	]
 
 	def createPropagationMatrix(self):
 		self.addPropagation("Atlanta", "Austin", 24)
@@ -116,5 +116,5 @@ class LocationCalculator(object):
 if __name__ == "__main__":
 	loc1 = Location("Washington")
 	loc2 = Location("Chicago")
-	print "Delay from " + loc1.city + " to " + loc2.city + " is
-	" + str(loc1.propagationDelayFrom(loc2)) + " ms"
+	print "Delay from " + loc1.city + " to " + loc2.city + " is"
+	print str(loc1.propagationDelayFrom(loc2)) + " ms"

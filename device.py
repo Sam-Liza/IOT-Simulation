@@ -24,7 +24,7 @@ class Device(object):
 		else:
 			return []
 
-	def receivePacket(packet):
+	def receivePacket(self, packet):
 		id = packet.packet_id
 		arrival = packet.arriveTime()
 		self.data.putReceive(id, arrival)
