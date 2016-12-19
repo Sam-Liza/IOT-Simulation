@@ -1,7 +1,4 @@
-from plotly.plotly import iplot as plot
-from plotly import graph_objs as graph
-
-import statistics
+import pandas, ggplot
 
 class Visualizer(object):
 	# data should be a list of Data, where each list element corresponds to
@@ -10,16 +7,10 @@ class Visualizer(object):
 		self.data = data
 		self.labels = labels
 
-	def visualize(data, labels, file = 'results/tmp'):
-		data = [graph.Bar(
-		    x = labels,
-		    y = data
-		)]
-		plot(data, filename=file)
-
 	def plotAverageLatency(self):
-		labels = map(str, range(len(self.data)))        # "0", "1", "2", ...
-		data = [device.averageLatency() for device in self.data]
-		outputFile = 'average_latency'
-		visualize(data, labels, outputFile)
-
+		averages = [d.averageLatency() for d in self.data]
+		dat = { "device" : range(1, len(averages) + 1), "average" : averages }
+		dataframe = pandas.DataFrame(dat)
+		chart = ggplot.ggplot(ggplot.aes(x="device", weight="average"), dataframe) + \
+				ggplot.geom_bar(stat="identity")
+		chart.show()

@@ -1,96 +1,64 @@
 import cloud, device, network, packet, data
-from packet import Packet
-import heapq
+from packet import Packet,PacketQueue
 
 CLOUD = 0
 MAX_PACKETS_PER_STEP = 350 # https://blog.cloudflare.com/how-to-receive-a-million-packets/
 
 class Simulator(object):
 
-	def __init__(self, cloud, network, devices, simTime):
+	def __init__(self, cloud, network, devices):
 		self.endpoints = [cloud] + devices
+		for i in xrange(self.numEndpoints()): self.endpoints[i].id = i
 		self.network = network
+		self.packetqueue = PacketQueue()
 		self.time = 0
-		self.endTime = simTime
 
-		# Priority queue of tuples (timestamp+elapsedtime, packet)
-		self.activePackets = []
-
-	def run(self):
-		totalTimeStr = str(self.endTime)
-		for timeStep in xrange(self.endTime):
-			if timeStep % 100 == 0:
-				print "\r" + "Computing time step: " + str(timeStep) + " out of " + totalTimeStr,
-			self.runStep(timeStep)
+	def runFor(self, time):
+		for t in xrange(self.time, self.time + time + 1):
+			if t % 256 == 0 or t == time: _printProgress(t, self.time + time + 1)
+			self.step()
 
 	def getResults(self):
-		results = []
-		for deviceID in xrange(1, self.numEndpoints()):
-			results.append(self.endpoints[deviceID].data)
-		return results
+		return [self.endpoints[i].data for i in xrange(1, self.numEndpoints())]
 
-	def numEndpoints(self):
-		return len(self.endpoints)
+	def step(self):
+		self.time += 1
 
-	def runStep(self, step):
-		self.deliverReadyPackets(step)
-		self.updateActivePackets(step)
+		deliveryCounts = [0] * self.numEndpoints()
+		while not self.packetqueue.empty() \
+				and self.packetqueue.next().isReady(self.time):
+			packet = self.packetqueue.pop()
+			dest = packet.receiver
+			if deliveryCounts[dest] <= MAX_PACKETS_PER_STEP:
+				self.endpoints[dest].receivePacket(packet)
+				deliveryCounts[dest] += 1
+			else:
+				pass # Packet lost due to buffer overflow
+
+		for endpoint in self.endpoints:
+			response = endpoint.step()
+			for packet in response:
+				networkResponse = self.sendThruNetwork(packet)
+				if networkResponse is not None:
+					self.packetqueue.push(networkResponse)
 
 	def sendThruNetwork(self, packet):
 		senderLocation = self.locationOf(packet.sender)
 		receiverLocation = self.locationOf(packet.receiver)
 		response = self.network.networkDelay(senderLocation, receiverLocation)
-		if self.dropped(response):
+		if response is None:
 			return None
 		else:
 			delay = response
 			packet.addLatency(delay)
 			return packet
 
-	def dropped(self, response):
-		return response is None
-
-	def addActivePacket(self, packet):
-		toAdd = (packet.arriveTime(), packet)
-		heapq.heappush(self.activePackets, toAdd)
-
-	def nextActivePacket(self):
-		return self.activePackets[0][1]
-
-	def hasActivePackets(self):
-		return len(self.activePackets) > 0
-
-	def popActivePacket(self):
-		return heapq.heappop(self.activePackets)[1]
-
-	def deliverReadyPackets(self, step):
-		self.resetDeliveryCounts()
-		if self.hasActivePackets() and self.nextActivePacket().isReady(step):
-			self.deliverPacket(self.popActivePacket())
-
-	def deliverPacket(self, packet):
-		dest = packet.receiver
-		if self.deliveryCounts[dest] <= MAX_PACKETS_PER_STEP:
-			self.endpoints[dest].receivePacket(packet)
-			self.incrementDeliveryCountFor(dest)
-
-	def incrementDeliveryCountFor(self, deviceID):
-		self.deliveryCounts[deviceID] += 1
-
-	def updateActivePackets(self, step):
-		for endpoint in self.endpoints:
-			response = endpoint.responseAt(step)
-			if response is not None:
-				for packet in response:
-					self.queuePacket(packet)
-
-	def queuePacket(self, packet):
-		networkResponse = self.sendThruNetwork(packet)
-		if isinstance(networkResponse, Packet):
-			self.addActivePacket(networkResponse)
-
-	def resetDeliveryCounts(self):
-		self.deliveryCounts = [0] * len(self.endpoints)
-
 	def locationOf(self, deviceID):
 		return self.endpoints[deviceID].location
+
+	def numEndpoints(self):
+		return len(self.endpoints)
+
+def _printProgress(currstep, total):
+	print "\rComputing time step: %d to %d" % (currstep, total),
+
