@@ -1,52 +1,81 @@
 import Queue
+if __name__ == "__main__": import packet
 
 # these delays can be seen as the time response time of the server for each game
-# being played 
+# being played
 
-HI_P_CLOUD_DELAY = 10  
-MED_P_CLOUD_DELAY = 5
-LOW_P_CLOUD_DELAY = 3
+TRAFFIC_DELAY = { 'high' : 10, 'med' : 5, 'low' : 3 }
 
 class Cloud(object):
 
 	def __init__(self, gameTraffic, location, timeout, num_players):
-		
+
 		self.requestList = Queue.Queue()
 
-		if gameTraffic == 0: 
-			self.timeToProcess = LOW_P_CLOUD_DELAY
-		elif gameTraffic == 1: 
-			self.timeToProcess = MED_P_CLOUD_DELAY
-		else:
-			self.timeToProcess = HIGH_P_CLOUD_DELAY
+		self.timeToProcess = TRAFFIC_DELAY(gameTraffic)
 
 		self.num_players = num_players
 		self.location = location
-		self.timeMS = 0
 		self.timeout = timeout
 
-	def updateTime(self, time):  
-		self.timeMS = time
-		return self.processResponse(time)
-
-	def processResponse(self, time):
-		if self.timeMS  % self.timeToProcess == 0 and not self.requestList.empty() :
+	def responseAt(self, time):
+		if time % self.timeToProcess == 0 and not self.requestList.empty() :
 			headPacket = self.requestList.get();
-			if (time - headPacket.timestamp) >  self.timeout: 
+			if (time - headPacket.timestamp) >  self.timeout:
 				return None
-			else: 
+			else:
 				responsePackets = []
 				for i in range(1,self.num_players):
 					newPacket = headPacket
 
-					# update packet 
-					newPacket.sendAddress = 0
-					newPacket.receiveAddress = i
+					# update packet
+					newPacket.sender = 0
+					newPacket.receiver = i
+
 					responsePackets.append(newPacket)
 				return responsePackets
 		else:
 			return None
 
-	def receiveRequest(self, packet):
+	def receivePacket(self, packet):
 		self.requestList.put(packet)
+
+
+if __name__ == "__main__":
+	packet1 = packet.Packet(100, 0, 0, 1)
+	packet2 = packet.Packet( 0, 0, 0, 2)
+	packet3 = packet.Packet(100, 0, 0, 1)
+	packet4 = packet.Packet( 100, 0, 0, 2)
+
+	cloud = cloud.Cloud(0, 0, 10, 10)
+
+	cloud.receivePacket(packet1)
+	cloud.receivePacket(packet4)
+	cloud.receivePacket(packet3)
+	cloud.receivePacket(packet2)
+
+	time = 100
+	print "\ntest 1: should return 3 packets"
+	for i in range(0,20):
+		#print time
+		packetList = cloud.updateTime(time)
+		if packetList != None:
+			print packetList[0].packet_id
+		time = time + 1
+
+	cloud.receivePacket(packet1)
+	cloud.receivePacket(packet2)
+	cloud.receivePacket(packet3)
+	cloud.receivePacket(packet4)
+
+	time = 100
+	print "\ntest 2: should return 2 packets"
+
+	for i in range(0,20):
+		#print time
+		packetList = cloud.updateTime(time)
+		if packetList != None:
+			print packetList[0].packet_id
+		time = time + 1
+	print "\n"
 
