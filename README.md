@@ -19,6 +19,10 @@ Make your own test:
 
     nano vr_simulation.py
 
+Run it:
+
+    python vr_simulation.py
+
 Example output with random settings:
 
 ![Sample output with default settings](https://raw.githubusercontent.com/gabe-terrell/IOT-Simulation/master/figure_2.png "Sample output")
